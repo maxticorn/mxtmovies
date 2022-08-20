@@ -2,18 +2,18 @@ ThisBuild / version := "0.1.0"
 
 ThisBuild / scalaVersion := "2.13.8"
 
-lazy val root = (project in file("."))
+lazy val mxtmovies = (project in file("."))
   .settings(name := "mxtmovies")
 
-val zioVersion        = "2.0.0"
-val zioConfigVersion  = "3.0.1"
-val zioCacheVersion   = "0.2.0"
-val zioCatsVersion    = "3.3.0"
-val tapirVersion      = "1.0.3"
-val http4sVersion     = "0.23.12"
-val doobieVersion     = "1.0.0-RC1"
-val slf4jVersion      = "2.0.0-alpha7"
-val chimneyV          = "0.6.2"
+val zioVersion       = "2.0.0"
+val zioConfigVersion = "3.0.1"
+val zioCacheVersion  = "0.2.0"
+val zioCatsVersion   = "3.3.0"
+val tapirVersion     = "1.0.3"
+val http4sVersion    = "0.23.12"
+val doobieVersion    = "1.0.0-RC1"
+val slf4jVersion     = "2.0.0-alpha7"
+val chimneyV         = "0.6.2"
 
 libraryDependencies ++= List(
   "dev.zio"                     %% "zio"                     % zioVersion,

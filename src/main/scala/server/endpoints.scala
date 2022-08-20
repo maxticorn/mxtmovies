@@ -16,17 +16,17 @@ object endpoints {
     .in("api")
     .errorOut(oneOf(oneOfVariant(defaultError), oneOfVariant(paramsError)))
 
-  private val genreRequest =
-    (query[Option[String]]("genre") and query[Option[Int]]("limit"))
-      .map[Option[GenreRequest]]((_: (Option[String], Option[Int])).mapN(GenreRequest)) {
-        _.map(req => (req.name, req.limit)).unzip
-      }
+  val titlesBase = baseEndpoint.get.in("titles")
 
-  val title =
-    baseEndpoint.get
-      .in("title")
-      .in(query[Option[TitleNameRequest]]("name"))
-      .in(genreRequest)
+  val titles =
+    titlesBase
+      .in((query[String]("genre") and query[Int]("limit")).mapTo[Filters])
+      .out(jsonBody[MovieResponse])
+
+  val titlesSearch =
+    titlesBase
+      .in("search")
+      .in(query[TitleNameRequest]("name"))
       .out(jsonBody[MovieResponse])
 
   val kevinBaconDegree =

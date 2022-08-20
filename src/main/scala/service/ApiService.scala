@@ -12,7 +12,7 @@ import scala.language.postfixOps
 
 trait ApiService {
   def getByTitle(title: TitleNameRequest): IO[BusinessError, MovieResponse]
-  def topInGenre(genre: GenreRequest): IO[BusinessError, MovieResponse]
+  def topInGenre(genre: Filters): IO[BusinessError, MovieResponse]
   def kevinBaconDegree(name: String): IO[BusinessError, KevinBaconDegreeResponse]
 }
 
@@ -27,9 +27,9 @@ case class ApiServiceImpl(titles: TitleService,
       .tapErrorCause(ZIO.logCause(_))
       .mapError(_ => BusinessError(""))
 
-  def topInGenre(genre: GenreRequest): IO[BusinessError, MovieResponse] =
+  def topInGenre(genre: Filters): IO[BusinessError, MovieResponse] =
     titles
-      .getTopByGenre(genre.name, genre.limit)
+      .getTopByGenre(genre.genre, genre.limit)
       .map(MovieResponse(_))
       .tapErrorCause(ZIO.logCause(_))
       .mapError(_ => BusinessError(""))

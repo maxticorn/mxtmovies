@@ -18,23 +18,16 @@ import scala.language.postfixOps
 
 case class ServerBuilder(apiService: ApiService) {
   private val endpointsForSwagger =
-    List(title, kevinBaconDegree)
+    List(titles, titlesSearch, kevinBaconDegree)
 
   private val swaggerEndpoints: List[ZServerEndpoint[Any, Any]] =
     SwaggerInterpreter().fromEndpoints[Task](endpointsForSwagger, "imdb", "1.0")
 
-  private def titleLogic(params: (Option[TitleNameRequest], Option[GenreRequest])) =
-    params match {
-      case (Some(value), None) => apiService.getByTitle(value)
-      case (None, Some(value)) => apiService.topInGenre(value)
-      case _ =>
-        ZIO.fail(ParamsError("only one of the parameters (name or genre) must be provided"))
-    }
-
   private val routes: HttpRoutes[Task] =
     ZHttp4sServerInterpreter()
       .from(
-        title.zServerLogic(titleLogic) ::
+        titles.zServerLogic(apiService.topInGenre) ::
+          titlesSearch.zServerLogic(apiService.getByTitle) ::
           kevinBaconDegree.zServerLogic(apiService.kevinBaconDegree) ::
           swaggerEndpoints
       )
